@@ -6,16 +6,17 @@ optioneer
 .. image:: https://img.shields.io/pypi/v/optioneer.svg
         :target: https://pypi.python.org/pypi/optioneer
 
+.. image:: https://img.shields.io/pypi/status/optioneer.svg
+        :target: https://pypi.python.org/pypi/optioneer
+
 .. image:: https://travis-ci.com/topper-123/optioneer.svg?branch=master
     :target: https://travis-ci.com/topper-123/optioneer
 
 .. image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
     :target: https://github.com/topper-123/optioneer/blob/master/LICENSE
 
-.. image:: https://pyup.io/repos/github/topper-123/optioneer/shield.svg
-     :target: https://pyup.io/repos/github/topper-123/optioneer/
-     :alt: Updates
-
+.. image:: https://img.shields.io/pypi/pyversions/optioneer.svg
+    :target: https://pypi.python.org/pypi/optioneer
 
 Optioneer makes in-program options, that:
 
@@ -45,20 +46,20 @@ In a ``config.py`` file set up your options:
 .. code-block:: python
 
     from optioneer import Optioneer
-    opt_maker = Optioneer()
-    opt_maker.register_option('api_key', 'abcdefg')
-    opt_maker.register_option('display.width', 200, doc='Width of our display')
-    opt_maker.register_option('display.height', 200, doc='Height of our display')
-    opt_maker.register_option('color', 'red', validator=opt_maker.is_str)
+    options_maker = Optioneer()
+    options_maker.register_option('api_key', 'abcdefg')
+    options_maker.register_option('display.width', 200, doc='Width of our display')
+    options_maker.register_option('display.height', 200, doc='Height of our display')
+    options_maker.register_option('color', 'red', validator=options_maker.is_str)
 
-    options = opt_maker.options
+    options = options_maker.options
 
 Then, in the relevant location of your library, just do
 ``from config import options`` and you're got your options set up.
 
-Users of your library can now fromm the relevant location, e.g. if you've
-made it available in the top-level ``__init__.py`` of a package called
-``mylib``:
+Users of your library can now access the options from the relevant location
+in your package, e.g. if you've made it available in the top-level
+``__init__.py`` of a package called ``mylib``:
 
 >>> import mylib
 >>> import mylib.options
@@ -75,7 +76,7 @@ Options(
 
 Notice how the repr output shows the relevant options and their descriptions.
 
-The relevant options can also be found using tab in the REPL:
+The relevant options are discoverable using tabs in the REPL:
 
 >>> mylib.options.<TAB>
 option.api_key options.color options.display
@@ -85,7 +86,7 @@ options.display.height options.display.width
 You can also easily see the options and their values and docs for subgroups in
 the repr string:
 
->>> options.display
+>>> mylib.options.display
 Options(
   display.height: Height of our display
       [default: 200] [currently: 200]
@@ -96,25 +97,32 @@ Options(
 Callbacks
 ---------
 By providing a callback when registering options, changing options may trigger
-a desired actions. For example:
+a desired actions. For example, if you in your ``config.py`` do:
 
->>> opt_maker.register_option('shout', True, callback=lambda x: print("YEAH!"))
->>> options.shout = False
+.. code-block:: python
+
+    options_maker.register_option('shout', True, callback=lambda x: print("YEAH!"))
+
+Then the user, when changing that option will see:
+
+>>> mylib.options.shout = False
 YEAH!
 
-Of course, the callback can be more realistic than above, e.g. logging or setting
-some internal option or something else.
+Of course, the callback can be more realistic than above, e.g. logging or
+setting some internal option or something else.
 
 Deprecating options
 -------------------
 
 If you want to deprecate an option, ``optioneer`` allows you to do that:
 
->>> opt_maker.deprecate_option('api_key', msg='An api key is no longer needed')
+.. code-block:: python
+
+    options_maker.deprecate_option('api_key', msg='An api key is no longer needed')
 
 Now your users get a deprecation warning, if they access this option:
 
->>> options.api_key
+>>> mylib.options.api_key
 An api key is no longer needed
 C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:677: FutureWarning: An api key is no longer needed
   warnings.warn(deprecated_option.msg, FutureWarning)
@@ -123,13 +131,20 @@ Out[20]: 'abcdefg'
 If an options should be renamed and/or a marker should be for when the option will
 be removed, that is also possible:
 
->>> opt_maker.register_option('display.length', 300, doc='Length of our display')
->>> opt_maker.deprecate_option('display.height', redirect_key='display.length',
-...                            removal_version='v1.3')
->>> options.display.height
+.. code-block:: python
+
+    options_maker.register_option('display.length', 300, doc='Length of our display')
+    options_maker.deprecate_option('display.height', redirect_key='display.length',
+                                   removal_version='v1.3')
+
+Then accessing the option will show
+
+>>> mylib.options.display.height
 C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
   warnings.warn(msg, FutureWarning)
 Out[24]: 300
+
+Deprecated options will not show up in repr output or when tab-completing.
 
 Dependencies
 ------------
