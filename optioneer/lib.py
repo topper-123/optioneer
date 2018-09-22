@@ -5,7 +5,8 @@ import warnings
 
 RegisteredOption = namedtuple('RegisteredOption',
                               'key default_value doc validator callback')
-DeprecatedOption = namedtuple('DeprecatedOption', 'key msg rkey removal_version')
+DeprecatedOption = namedtuple('DeprecatedOption',
+                              'key msg redirect_key removal_version')
 
 
 class OptioneerError(AttributeError, KeyError):
@@ -547,17 +548,17 @@ class Optioneer:
         Mark option `key` as deprecated, if code attempts to access this
         option, a warning will be produced, using `msg` if given, or a
         default message if not.
-        if `redirect_key` is given, any access to the key will be re-routed
+        if `redirect_key` is given, any access to `key` will be re-routed
         to `redirect_key`.
 
-        Neither the existence of `key` nor that if `redirect_key` is checked.
+        Neither the existence of `key` nor that of `redirect_key` is checked.
         If they do not exist, any subsequent access will fail as usual,
         after the deprecation warning is given.
 
         Parameters
         ----------
         key - the name of the option to be deprecated. must be a
-                fully-qualified option name (e.g "x.y.z.redirect_key").
+                fully-qualified option name (e.g "x.y.z.key").
 
         msg - (Optional) a warning message to output when the key is referenced
               if no message is given a default message will be emitted.
@@ -566,8 +567,8 @@ class Optioneer:
                        If specified, any referenced `key` will be re-routed to
                        `redirect_key` including set/get/reset.
                        `redirect_key` must be a fully-qualified option name
-                       (e.g "x.y.z.redirect_key") used by the default message if no
-                       `msg` is specified.
+                       (e.g "x.y.z.redirect_key") used by the default message
+                       if no `msg` is specified.
 
         removal_version - (Optional) specifies the version in which this option
                       will be removed. used by the default message if no `msg`
@@ -588,7 +589,8 @@ class Optioneer:
             raise OptioneerError(msg.format(key=key))
 
         self._deprecated_options[key] = DeprecatedOption(key, msg,
-                                                         redirect_key, removal_version)
+                                                         redirect_key,
+                                                         removal_version)
 
     #
     # functions internal to the class
@@ -657,7 +659,7 @@ class Optioneer:
 
         deprecated_option = self._get_deprecated_option(key)
         if deprecated_option:
-            return deprecated_option.rkey or key
+            return deprecated_option.redirect_key or key
         else:
             return key
 
@@ -680,9 +682,9 @@ class Optioneer:
                 if deprecated_option.removal_version:
                     msg += (' and will be removed in {version}'
                             .format(version=deprecated_option.removal_version))
-                if deprecated_option.rkey:
+                if deprecated_option.redirect_key:
                     msg += (", please use '{rkey}' instead."
-                            .format(rkey=deprecated_option.rkey))
+                            .format(rkey=deprecated_option.redirect_key))
                 else:
                     msg += ', please refrain from using it.'
 
@@ -713,8 +715,8 @@ class Optioneer:
         if deprecated_option:
             description += u'\n    (Deprecated'
             description += (u', use `{rkey}` instead.'
-                  .format(rkey=deprecated_option.rkey
-                          if deprecated_option.rkey else u''))
+                            .format(rkey=deprecated_option.redirect_key
+                            if deprecated_option.redirect_key else u''))
             description += u')'
 
         description += '\n'
