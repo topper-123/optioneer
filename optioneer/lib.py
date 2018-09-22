@@ -487,7 +487,7 @@ class Optioneer:
                         a legal value for the option.
         callback      - a function of a single argument `key`, which is
                         called immediately after an option value is set/reset.
-                        ´key` is the full name of the option.
+                        `key` is the full name of the option.
 
         Returns
         -------
@@ -759,7 +759,7 @@ class Optioneer:
         """
         context manager for multiple invocations of API with a common prefix.
 
-        supported API functions: (register / get / set )__option
+        supported API functions: (register / get / set )__option.
 
         Warning: This is not thread - safe, and won't work properly if you
         import the API functions into your module using the "from x import y"

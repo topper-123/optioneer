@@ -6,8 +6,11 @@ optioneer
 .. image:: https://img.shields.io/pypi/v/optioneer.svg
         :target: https://pypi.python.org/pypi/optioneer
 
-.. image:: https://img.shields.io/travis/topper-123/optioneer.svg
-        :target: https://travis-ci.org/topper-123/optioneer
+.. image:: https://travis-ci.com/topper-123/optioneer.svg?branch=master
+    :target: https://travis-ci.com/topper-123/optioneer
+
+.. image:: https://img.shields.io/badge/License-BSD%203--Clause-blue.svg
+    :target: https://github.com/topper-123/optioneer/blob/master/LICENSE
 
 .. image:: https://pyup.io/repos/github/topper-123/optioneer/shield.svg
      :target: https://pyup.io/repos/github/topper-123/optioneer/
