@@ -111,13 +111,19 @@ Out[20]: 'abcdefg'
 If an options should be renamed and/or a marker should be for when the option will
 be removed, that is also possible:
 
->>> opt_maker.register_option('display.length', 200, doc='Length of our display')
+>>> opt_maker.register_option('display.length', 300, doc='Length of our display')
 >>> opt_maker.deprecate_option('display.height', redirect_key='display.length',
-...                            removal_ver='1.3')
+...                            removal_ver='v1.3')
 >>> options.display.height
-C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in 1.3, please use 'display.length' instead.
+C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
   warnings.warn(msg, FutureWarning)
-Out[24]: 200
+Out[24]: 300
+
+Dependencies
+------------
+Optioneer has no external dependencies.
+
+Optioneer uses pytest for testing.
 
 License
 -------
