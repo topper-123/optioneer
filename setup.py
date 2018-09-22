@@ -18,7 +18,7 @@ setup(
     author="Terji Petersen",
     author_email='contribute@tensortable.com',
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
@@ -42,6 +42,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/topper-123/optioneer',
-    version='1.0.2',
+    version='1.0.3',
     zip_safe=True,
 )

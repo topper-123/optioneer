@@ -61,38 +61,44 @@ Users of your library can now access the options from the relevant location
 in your package, e.g. if you've made it available in the top-level
 ``__init__.py`` of a package called ``mylib``:
 
->>> import mylib
->>> import mylib.options
-Options(
-  api_key: No description available.
-      [default: abcdefg] [currently: abcdefg]
-  color: No description available.
-      [default: red] [currently: red]
-  display.height: Height of our display
-      [default: 200] [currently: 200]
-  display.width: Width of our display
-      [default: 200] [currently: 200]
-  )
+.. code-block:: python
+
+    >>> import mylib
+    >>> import mylib.options
+    Options(
+      api_key: No description available.
+          [default: abcdefg] [currently: abcdefg]
+      color: No description available.
+          [default: red] [currently: red]
+      display.height: Height of our display
+          [default: 200] [currently: 200]
+      display.width: Width of our display
+          [default: 200] [currently: 200]
+      )
 
 Notice how the repr output shows the relevant options and their descriptions.
 
 The relevant options are discoverable using tabs in the REPL:
 
->>> mylib.options.<TAB>
-option.api_key options.color options.display
->>> mylib.options.display.<TAB>
-options.display.height options.display.width
+.. code-block:: python
+
+    >>> mylib.options.<TAB>
+    option.api_key options.color options.display
+    >>> mylib.options.display.<TAB>
+    options.display.height options.display.width
 
 You can also easily see the options and their values and docs for subgroups in
 the repr string:
 
->>> mylib.options.display
-Options(
-  display.height: Height of our display
-      [default: 200] [currently: 200]
-  display.width: Width of our display
-      [default: 200] [currently: 200]
-  )
+.. code-block:: python
+
+    >>> mylib.options.display
+    Options(
+      display.height: Height of our display
+          [default: 200] [currently: 200]
+      display.width: Width of our display
+          [default: 200] [currently: 200]
+      )
 
 Callbacks
 ---------
@@ -105,8 +111,10 @@ a desired actions. For example, if you in your ``config.py`` do:
 
 Then the user, when changing that option will see:
 
->>> mylib.options.shout = False
-YEAH!
+.. code-block:: python
+
+    >>> mylib.options.shout = False
+    YEAH!
 
 Of course, the callback can be more realistic than above, e.g. logging or
 setting some internal option or something else.
@@ -122,11 +130,13 @@ If you want to deprecate an option, ``optioneer`` allows you to do that:
 
 Now your users get a deprecation warning, if they access this option:
 
->>> mylib.options.api_key
-An api key is no longer needed
-C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:677: FutureWarning: An api key is no longer needed
-  warnings.warn(deprecated_option.msg, FutureWarning)
-Out[20]: 'abcdefg'
+.. code-block:: python
+
+    >>> mylib.options.api_key
+    An api key is no longer needed
+    C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:677: FutureWarning: An api key is no longer needed
+      warnings.warn(deprecated_option.msg, FutureWarning)
+    Out[20]: 'abcdefg'
 
 If an options should be renamed and/or a marker should be for when the option will
 be removed, that is also possible:
@@ -139,10 +149,12 @@ be removed, that is also possible:
 
 Then accessing the option will show
 
->>> mylib.options.display.height
-C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
-  warnings.warn(msg, FutureWarning)
-Out[24]: 300
+.. code-block:: python
+
+    >>> mylib.options.display.height
+    C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
+      warnings.warn(msg, FutureWarning)
+    Out[24]: 300
 
 Deprecated options will not show up in repr output or when tab-completing.
 
