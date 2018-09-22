@@ -18,17 +18,23 @@ optioneer
 .. image:: https://img.shields.io/pypi/pyversions/optioneer.svg
     :target: https://pypi.python.org/pypi/optioneer
 
-Optioneer makes in-program options, that:
+``optioneer`` makes in-program options, that:
 
-* are nestable and groupable,
-* are tab-able in the REPL for easy options discoverability
-* give each option a optional doc string, for easily explaining the option
-* may deprecate according to a transparent deprecation cycle
-* may be validated upon change
-* can do custom  callbacks
+* can be nested and grouped,
+* can be discovered in the REPL when tab-completing,
+* can give each option a doc string, for easily explaining the option
+* may deprecate options according to a transparent deprecation cycle
+* may validate options when they're changed
+* can do custom callbacks
 
-Optioneer is based on the ``core/config.py`` module in
-`pandas <https.//pandas.pydata.org>`_.
+``optioneer`` does not do CLI options, but is used strictly to create in-program
+options.
+
+As such, it's best use case is probably to create options for library code
+that is used by other programs. In fact, ``optioneer`` is a reworked and
+self-contained version of the ``core/config.py`` module in
+`pandas <https.//pandas.pydata.org>`_ and options created by ``optioneer``
+work very similarly to ``pandas.options``.
 
 Installation
 ------------
@@ -41,13 +47,14 @@ Installing is easy using pip:
 
 Usage guide
 -----------
-In a ``config.py`` file set up your options:
+In a ``config.py`` file in your package set up your options:
 
 .. code-block:: python
 
     from optioneer import Optioneer
+
     options_maker = Optioneer()
-    options_maker.register_option('api_key', 'abcdefg')
+    options_maker.register_option('api_key', 'abcdefg', doc='The API key to our service')
     options_maker.register_option('display.width', 200, doc='Width of our display')
     options_maker.register_option('display.height', 200, doc='Height of our display')
     options_maker.register_option('color', 'red', validator=options_maker.is_str)
@@ -55,10 +62,10 @@ In a ``config.py`` file set up your options:
     options = options_maker.options
 
 Then, in the relevant location of your library, just do
-``from config import options`` and you're got your options set up.
+``from .config import options`` and you're got your options set up.
 
-Users of your library can now access the options from the relevant location
-in your package, e.g. if you've made it available in the top-level
+Users of your library can now access the options from the chosen location
+in your package. For example, if you've made it available in the top-level
 ``__init__.py`` of a package called ``mylib``:
 
 .. code-block:: python
@@ -66,7 +73,7 @@ in your package, e.g. if you've made it available in the top-level
     >>> import mylib
     >>> import mylib.options
     Options(
-      api_key: No description available.
+      api_key: The API key to our service.
           [default: abcdefg] [currently: abcdefg]
       color: No description available.
           [default: red] [currently: red]
@@ -102,14 +109,14 @@ the repr string:
 
 Callbacks
 ---------
-By providing a callback when registering options, changing options may trigger
+By providing a callback when registering options, changed options may trigger
 a desired actions. For example, if you in your ``config.py`` do:
 
 .. code-block:: python
 
     options_maker.register_option('shout', True, callback=lambda x: print("YEAH!"))
 
-Then the user, when changing that option will see:
+Then the user, when changing that option will trigger the callback:
 
 .. code-block:: python
 
@@ -122,7 +129,7 @@ setting some internal option or something else.
 Deprecating options
 -------------------
 
-If you want to deprecate an option, ``optioneer`` allows you to do that:
+If you need to deprecate an option, ``optioneer`` allows you to do that:
 
 .. code-block:: python
 
@@ -138,8 +145,8 @@ Now your users get a deprecation warning, if they access this option:
       warnings.warn(deprecated_option.msg, FutureWarning)
     Out[20]: 'abcdefg'
 
-If an options should be renamed and/or a marker should be for when the option will
-be removed, that is also possible:
+If an options should be renamed and/or a marker should be set for when the
+option will be removed, that is also possible:
 
 .. code-block:: python
 
@@ -147,7 +154,7 @@ be removed, that is also possible:
     options_maker.deprecate_option('display.height', redirect_key='display.length',
                                    removal_version='v1.3')
 
-Then accessing the option will show
+Then accessing the ``display.height`` option will show
 
 .. code-block:: python
 
@@ -156,14 +163,14 @@ Then accessing the option will show
       warnings.warn(msg, FutureWarning)
     Out[24]: 300
 
-Deprecated options will not show up in repr output or when tab-completing.
+Deprecated options will not show up in the repr output or when tab-completing.
 
 Dependencies
 ------------
-Optioneer has no external dependencies.
+``optioneer`` has no external dependencies.
 
-Optioneer uses pytest for testing.
+``optioneer`` uses pytest for testing.
 
 License
 -------
-Optioneer is BSD 3-licensed.
+``optioneer`` is BSD 3-licensed.
