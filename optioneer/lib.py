@@ -19,12 +19,12 @@ class Options(object):
     """ provide attribute-style access to a nested dict"""
 
     def __init__(self, config, d, prefix=""):
-        object.__setattr__(self, "_config", config)
-        object.__setattr__(self, "d", d)
-        object.__setattr__(self, "prefix", prefix)
+        super(Options, self).__setattr__("_config", config)
+        super(Options, self).__setattr__("d", d)
+        super(Options, self).__setattr__("prefix", prefix)
 
     def __setattr__(self, key, value):
-        prefix = object.__getattribute__(self, "prefix")
+        prefix = super(Options, self).__getattribute__("prefix")
         if prefix:
             prefix += "."
         prefix += key
@@ -37,12 +37,12 @@ class Options(object):
             raise OptioneerError(msg)
 
     def __getattr__(self, key):
-        prefix = object.__getattribute__(self, "prefix")
+        prefix = super(Options, self).__getattribute__("prefix")
         if prefix:
             prefix += "."
         prefix += key
         try:
-            value = object.__getattribute__(self, "d")[key]
+            value = super(Options, self).__getattribute__("d")[key]
         except KeyError:
             raise OptioneerError("No such option")
         if isinstance(value, dict):
