@@ -5,7 +5,7 @@ import warnings
 
 RegisteredOption = namedtuple('RegisteredOption',
                               'key default_value doc validator callback')
-DeprecatedOption = namedtuple('DeprecatedOption', 'key msg rkey removal_ver')
+DeprecatedOption = namedtuple('DeprecatedOption', 'key msg rkey removal_version')
 
 
 class OptioneerError(AttributeError, KeyError):
@@ -542,7 +542,7 @@ class Optioneer:
             key=key, default_value=default_value, doc=doc,
             validator=validator, callback=callback)
 
-    def deprecate_option(self, key, msg=None, redirect_key=None, removal_ver=None):
+    def deprecate_option(self, key, msg=None, redirect_key=None, removal_version=None):
         """
         Mark option `key` as deprecated, if code attempts to access this
         option, a warning will be produced, using `msg` if given, or a
@@ -569,7 +569,7 @@ class Optioneer:
                        (e.g "x.y.z.redirect_key") used by the default message if no
                        `msg` is specified.
 
-        removal_ver - (Optional) specifies the version in which this option
+        removal_version - (Optional) specifies the version in which this option
                       will be removed. used by the default message if no `msg`
                       is specified.
 
@@ -588,7 +588,7 @@ class Optioneer:
             raise OptioneerError(msg.format(key=key))
 
         self._deprecated_options[key] = DeprecatedOption(key, msg,
-                                                         redirect_key, removal_ver)
+                                                         redirect_key, removal_version)
 
     #
     # functions internal to the class
@@ -677,9 +677,9 @@ class Optioneer:
                 warnings.warn(deprecated_option.msg, FutureWarning)
             else:
                 msg = "'{key}' is deprecated".format(key=key)
-                if deprecated_option.removal_ver:
+                if deprecated_option.removal_version:
                     msg += (' and will be removed in {version}'
-                            .format(version=deprecated_option.removal_ver))
+                            .format(version=deprecated_option.removal_version))
                 if deprecated_option.rkey:
                     msg += (", please use '{rkey}' instead."
                             .format(rkey=deprecated_option.rkey))

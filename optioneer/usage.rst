@@ -22,9 +22,10 @@ In a ``config.py`` file set up your options:
 >>> opt_maker.register_option('color', 'red', validator=opt_maker.is_str)
 >>> options = opt_maker.options
 
-Then, in relevant location of your library, just do
-``from config import options`` and you're got your options set up. Notice that
-the options allow options discovery using tab in the REPL:
+Then, in the relevant location of your library, just do
+``from config import options`` and you're got your options set up.
+
+Notice that the options allow options discovery using tab in the REPL:
 
 >>> options.<TAB>
 option.api_key options.color options.display
@@ -37,25 +38,19 @@ You can also easily see the options and their values and docs in the repr string
 Options(
   api_key: No description available.
       [default: abcdefg] [currently: abcdefg]
-
   color: No description available.
       [default: red] [currently: red]
-
   display.height: Height of our display
       [default: 200] [currently: 200]
-
   display.width: Width of our display
       [default: 200] [currently: 200]
-
   )
->>> options.display.<TAB>
+>>> options.display
 Options(
   display.height: Height of our display
       [default: 200] [currently: 200]
-
   display.width: Width of our display
       [default: 200] [currently: 200]
-
   )
 
 Callbacks
@@ -88,6 +83,10 @@ Out[20]: 'abcdefg'
 If an options should be renamed and/or a marker should be for when the option will
 be removed, that is also possible:
 
->>> opt_maker.register_option('display.length', 200, doc='Length of our display')
+>>> opt_maker.register_option('display.length', 300, doc='Length of our display')
 >>> opt_maker.deprecate_option('display.height', redirect_key='display.length',
-...                            removal_ver='1.3')
+...                            removal_version='v1.3')
+>>> options.display.height
+C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
+  warnings.warn(msg, FutureWarning)
+Out[24]: 300

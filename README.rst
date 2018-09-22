@@ -42,27 +42,26 @@ Usage guide
 -----------
 In a ``config.py`` file set up your options:
 
->>> from optioneer import Optioneer
->>> opt_maker = Optioneer()
->>> opt_maker.register_option('api_key', 'abcdefg')
->>> opt_maker.register_option('display.width', 200, doc='Width of our display')
->>> opt_maker.register_option('display.height', 200, doc='Height of our display')
->>> opt_maker.register_option('color', 'red', validator=opt_maker.is_str)
->>> options = opt_maker.options
+.. code-block:: python
+
+    from optioneer import Optioneer
+    opt_maker = Optioneer()
+    opt_maker.register_option('api_key', 'abcdefg')
+    opt_maker.register_option('display.width', 200, doc='Width of our display')
+    opt_maker.register_option('display.height', 200, doc='Height of our display')
+    opt_maker.register_option('color', 'red', validator=opt_maker.is_str)
+
+    options = opt_maker.options
 
 Then, in the relevant location of your library, just do
 ``from config import options`` and you're got your options set up.
 
-Notice that the options allow options discovery using tab in the REPL:
+Users of your library can now fromm the relevant location, e.g. if you've
+made it available in the top-level ``__init__.py`` of a package called
+``mylib``:
 
->>> options.<TAB>
-option.api_key options.color options.display
->>> options.display.<TAB>
-options.display.height options.display.width
-
-You can also easily see the options and their values and docs in the repr string:
-
->>> options
+>>> import mylib
+>>> import mylib.options
 Options(
   api_key: No description available.
       [default: abcdefg] [currently: abcdefg]
@@ -73,6 +72,19 @@ Options(
   display.width: Width of our display
       [default: 200] [currently: 200]
   )
+
+Notice how the repr output shows the relevant options and their descriptions.
+
+The relevant options can also be found using tab in the REPL:
+
+>>> mylib.options.<TAB>
+option.api_key options.color options.display
+>>> mylib.options.display.<TAB>
+options.display.height options.display.width
+
+You can also easily see the options and their values and docs for subgroups in
+the repr string:
+
 >>> options.display
 Options(
   display.height: Height of our display
@@ -91,7 +103,7 @@ a desired actions. For example:
 YEAH!
 
 Of course, the callback can be more realistic than above, e.g. logging or setting
-some internal option on a class or something else.
+some internal option or something else.
 
 Deprecating options
 -------------------
@@ -113,7 +125,7 @@ be removed, that is also possible:
 
 >>> opt_maker.register_option('display.length', 300, doc='Length of our display')
 >>> opt_maker.deprecate_option('display.height', redirect_key='display.length',
-...                            removal_ver='v1.3')
+...                            removal_version='v1.3')
 >>> options.display.height
 C:\Users\TP\Documents\Python\optioneer\optioneer\lib.py:689: FutureWarning: 'display.height' is deprecated and will be removed in v1.3, please use 'display.length' instead.
   warnings.warn(msg, FutureWarning)

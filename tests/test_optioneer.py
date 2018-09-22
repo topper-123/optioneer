@@ -255,14 +255,14 @@ class TestConfig(object):
         self.cf.register_option('b.c', 'hullo', 'doc2')
         self.cf.register_option('foo', 'hullo', 'doc2')
 
-        self.cf.deprecate_option('a', removal_ver='nifty_ver')
+        self.cf.deprecate_option('a', removal_version='nifty_ver')
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             self.cf.get_option('a')
 
             assert len(w) == 1  # should have raised one warning
             assert 'eprecated' in str(w[-1])  # we get the default message
-            assert 'nifty_ver' in str(w[-1])  # with the removal_ver quoted
+            assert 'nifty_ver' in str(w[-1])  # with the removal_version quoted
 
             pytest.raises(
                 KeyError, self.cf.deprecate_option, 'a')  # can't depr. twice
