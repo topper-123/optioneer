@@ -30,7 +30,7 @@ optioneer
 ``optioneer`` does not do CLI options, but is used strictly to create in-program
 options.
 
-As such, it's best use case is probably to create options for library code
+As such, its best use case is probably to create options for library code
 that is used by other programs. In fact, ``optioneer`` is a reworked and
 self-contained version of the ``core/config.py`` module in
 `pandas <https.//pandas.pydata.org>`_ and options created by ``optioneer``
@@ -62,7 +62,7 @@ In a ``config.py`` file in your package set up your options:
     options = options_maker.options
 
 Then, in the relevant location of your library, just do
-``from .config import options`` and you're got your options set up.
+``from .config import options`` and you've got your options set up.
 
 Users of your library can now access the options from the chosen location
 in your package. For example, if you've made it available in the top-level
@@ -116,7 +116,7 @@ a desired actions. For example, if you in your ``config.py`` do:
 
     options_maker.register_option('shout', True, callback=lambda x: print("YEAH!"))
 
-Then the user, when changing that option will trigger the callback:
+Then the user, when changing that option, will trigger the callback:
 
 .. code-block:: python
 
