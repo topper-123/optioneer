@@ -73,14 +73,14 @@ in your package. For example, if you've made it available in the top-level
     >>> import mylib
     >>> import mylib.options
     Options(
-      api_key: The API key to our service
-          [default: 'abcdefg'] [currently: 'abcdefg']
-      color: No description available.
-          [default: 'red'] [currently: 'red']
-      display.height: Height of our display
-          [default: 200] [currently: 200]
-      display.width: Width of our display
-          [default: 200] [currently: 200]
+      api_key: 'abcdefg' [default: 'abcdefg']
+          The API key to our service
+      color: 'red' [default: 'red']
+          No description available.
+      display.height: 200 [default: 200]
+          Height of our display
+      display.width: 200 [default: 200]
+          Width of our display
       )
 
 Notice how the repr output shows the relevant options and their descriptions.
@@ -101,12 +101,11 @@ the repr string:
 
     >>> mylib.options.display
     Options(
-      display.height: Height of our display
-          [default: 200] [currently: 200]
-      display.width: Width of our display
-          [default: 200] [currently: 200]
+      display.height: 200 [default: 200]
+          Height of our display
+      display.width: 200 [default: 200]
+          Width of our display
       )
-
 Callbacks
 ---------
 By providing a callback when registering options, changed options may trigger

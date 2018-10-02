@@ -1,7 +1,10 @@
 import re
 from collections import namedtuple
 from contextlib import contextmanager
+import textwrap
 import warnings
+
+from . import utils
 
 RegisteredOption = namedtuple('RegisteredOption',
                               'key default_value doc validator callback')
@@ -703,17 +706,16 @@ class Optioneer:
         option = self._get_registered_option(key)
         deprecated_option = self._get_deprecated_option(key)
 
-        description = u'{key}: '.format(key=key)
+        description = u'{key}: {cur!r} [default: {default!r}]\n'.format(
+            key=key, cur=self._get_option(key, True),
+            default=option.default_value)
 
         if option.doc:
-            description += u'\n'.join(option.doc.strip().split('\n'))
+            doc_text = "\n".join(textwrap.wrap(option.doc, width=70))
         else:
-            description += u'No description available.'
-
-        if option:
-            description += (u'\n    [default: {default!r}] [currently: {cur!r}]'
-                            .format(default=option.default_value,
-                                    cur=self._get_option(key, True)))
+            doc_text = u'No description available.'
+        doc_text = utils.indent(doc_text, prefix="    ")
+        description += doc_text
 
         if deprecated_option:
             description += u'\n    (Deprecated'
@@ -730,13 +732,12 @@ class Optioneer:
         Builds a concise listing of available options, grouped by prefix.
         """
 
-        from textwrap import wrap
         from itertools import groupby
 
         def pp(name, ks):
             pfx = ('- ' + name + '.[' if name else '')
-            ls = wrap(', '.join(ks), width, initial_indent=pfx,
-                      subsequent_indent='  ', break_long_words=False)
+            ls = textwrap.wrap(', '.join(ks), width, initial_indent=pfx,
+                               subsequent_indent='  ', break_long_words=False)
             if ls and ls[-1] and name:
                 ls[-1] = ls[-1] + ']'
             return ls
