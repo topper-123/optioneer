@@ -474,14 +474,14 @@ class Optioneer:
             for pat, val in undo:
                 self._set_option(pat, val, silent=True)
 
-    def register_option(self, key, default_value, doc='',
+    def register_option(self, key, value, doc='',
                         validator=None, callback=None):
         """Register an option in the config object
 
         Parameters
         ----------
         key           - a fully-qualified key, e.g. "x.y.option - z".
-        default_value - the default value of the option
+        value         - the initial and default value of the option
         doc           - a string description of the option
         validator     - a function of a single argument, should raise
                         `ValueError` if called with a value which is not
@@ -496,7 +496,7 @@ class Optioneer:
 
         Raises
         ------
-        ValueError if `validator` is set and `default_value` is not a
+        ValueError if `validator` is set and `value` is not a
             valid value.
 
         """
@@ -513,7 +513,7 @@ class Optioneer:
 
         # the default value should be legal
         if validator:
-            validator(default_value)
+            validator(value)
 
         # walk the nested dict, creating dicts as needed along the path
         path = key.split('.')
@@ -536,14 +536,15 @@ class Optioneer:
         if not isinstance(cursor, dict):
             raise OptioneerError(msg.format(option='.'.join(path[:-1])))
 
-        cursor[path[-1]] = default_value  # initialize
+        cursor[path[-1]] = value  # initialize
 
         # save the option metadata
         self._registered_options[key] = RegisteredOption(
-            key=key, default_value=default_value, doc=doc,
+            key=key, default_value=value, doc=doc,
             validator=validator, callback=callback)
 
-    def deprecate_option(self, key, msg=None, redirect_key=None, removal_version=None):
+    def deprecate_option(self, key, msg=None, redirect_key=None,
+                         removal_version=None):
         """
         Mark option `key` as deprecated, if code attempts to access this
         option, a warning will be produced, using `msg` if given, or a
