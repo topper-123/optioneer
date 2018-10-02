@@ -114,17 +114,19 @@ a desired actions. For example, if you in your ``config.py`` do:
 
 .. code-block:: python
 
-    options_maker.register_option('shout', True, callback=lambda x: print("YEAH!"))
+    def callback_func(key, value):
+        print("key: {!r} value: {!r}".format(key, value))
+    options_maker.register_option('a.args', True, callback=callback_func)
 
-Then the user, when changing that option, will trigger the callback:
+Then changing that option will trigger the callback:
 
 .. code-block:: python
 
-    >>> mylib.options.shout = False
-    YEAH!
+    >>> mylib.options.args = False
+    key: 'a.args' value: False
 
-Of course, the callback can be more realistic than above, e.g. logging or
-setting some internal option or something else.
+Of course, the callback can be more realistic than in the example above, e.g.
+logging or setting some internal option or something else.
 
 Deprecating options
 -------------------

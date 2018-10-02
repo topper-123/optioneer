@@ -331,7 +331,7 @@ class TestConfig(object):
         k = [None]
         v = [None]
 
-        def callback(key):
+        def callback(key, value):
             k.append(key)
             v.append(self.cf.get_option(key))
 
@@ -377,7 +377,7 @@ class TestConfig(object):
         def f2():
             options.display = 1
 
-        def f3(key):
+        def f3(key, value):
             holder.append(True)
 
         self.cf.register_option('a', 0)

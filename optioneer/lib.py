@@ -402,9 +402,9 @@ class Optioneer:
             if option.callback:
                 if silent:
                     with warnings.catch_warnings(record=True):
-                        option.callback(key)
+                        option.callback(key, v)
                 else:
-                    option.callback(key)
+                    option.callback(key, v)
 
     def _describe_option(self, pat='', print_desc=True):
 
@@ -486,9 +486,11 @@ class Optioneer:
         validator     - a function of a single argument, should raise
                         `ValueError` if called with a value which is not
                         a legal value for the option.
-        callback      - a function of a single argument `key`, which is
-                        called immediately after an option value is set/reset.
-                        `key` is the full name of the option.
+        callback      - a function of two positional arguments `key` and
+                        `value. The function is called immediately after an
+                        option is changed.
+                        `key` is the full name of the option. `value` is the
+                        value, you intend to set the option to.
 
         Returns
         -------
@@ -709,7 +711,7 @@ class Optioneer:
             description += u'No description available.'
 
         if option:
-            description += (u'\n    [default: {default}] [currently: {cur}]'
+            description += (u'\n    [default: {default!r}] [currently: {cur!r}]'
                             .format(default=option.default_value,
                                     cur=self._get_option(key, True)))
 
