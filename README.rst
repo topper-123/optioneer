@@ -73,10 +73,10 @@ in your package. For example, if you've made it available in the top-level
     >>> import mylib
     >>> import mylib.options
     Options(
-      api_key: The API key to our service.
-          [default: abcdefg] [currently: abcdefg]
+      api_key: The API key to our service
+          [default: 'abcdefg'] [currently: 'abcdefg']
       color: No description available.
-          [default: red] [currently: red]
+          [default: 'red'] [currently: 'red']
       display.height: Height of our display
           [default: 200] [currently: 200]
       display.width: Width of our display

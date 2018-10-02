@@ -229,7 +229,7 @@ def is_instance_factory(type_):
     """
     if isinstance(type_, (tuple, list)):
         type_ = tuple(type_)
-        type_repr = "|".join(map(str, type_))
+        type_repr = "|".join(str(typ) for typ in type_)
     else:
         type_repr = "'{typ}'".format(typ=type_)
 
