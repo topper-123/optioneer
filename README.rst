@@ -47,7 +47,7 @@ Installing is easy using pip:
 
 Usage guide
 -----------
-In a ``config.py`` file in your package set up your options:
+In a ``config.py`` file in your package, set up your options:
 
 .. code-block:: python
 
