@@ -4,7 +4,7 @@ import warnings
 import pytest
 
 from .. import optioneer
-from ..optioneer import lib
+from ..optioneer import core
 
 
 class TestConfig(object):
@@ -20,7 +20,7 @@ class TestConfig(object):
 
     def setup_method(self, method):
         setattr(self.cf, '_global_config', {})
-        setattr(self.cf, 'options', lib.Options(
+        setattr(self.cf, 'options', core.Options(
             config=self.cf, d=self.cf._global_config))
         setattr(self.cf, '_deprecated_options', {})
         setattr(self.cf, '_registered_options', {})
@@ -39,7 +39,7 @@ class TestConfig(object):
         assert hasattr(self.cf, 'describe_option')
 
     def test_is_one_of_factory(self):
-        is_one_of_func = lib.is_one_of_factory([None, 12])
+        is_one_of_func = core.is_one_of_factory([None, 12])
 
         is_one_of_func(12)
         is_one_of_func(None)
@@ -194,7 +194,7 @@ class TestConfig(object):
         pytest.raises(ValueError, self.cf.set_option, 'a', 'ab')
         pytest.raises(ValueError, self.cf.set_option, 'b.c', 1)
 
-        validator = lib.is_one_of_factory([None, self.cf.is_callable])
+        validator = core.is_one_of_factory([None, self.cf.is_callable])
         self.cf.register_option('b', lambda: None, 'doc',
                                 validator=validator)
         self.cf.set_option('b', '%.1f'.format)  # Formatter is callable
@@ -426,6 +426,6 @@ class TestConfig(object):
     def test_options_getattr(self):
         options = self.cf.options
         # GH 19789
-        with pytest.raises(lib.OptioneerError):
+        with pytest.raises(core.OptioneerError):
             getattr(options, 'bananas')
         assert not hasattr(options, 'bananas')

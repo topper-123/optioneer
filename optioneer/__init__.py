@@ -55,5 +55,5 @@ __author__ = """Terji Petersen"""
 __email__ = 'contribute@tensortable.com'
 __version__ = '1.0.3'
 
-from . import lib
-from .lib import Optioneer
+from . import core
+from .core import Optioneer
