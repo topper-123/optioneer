@@ -71,7 +71,7 @@ in your package. For example, if you've made it available in the top-level
 .. code-block:: python
 
     >>> import mylib
-    >>> import mylib.options
+    >>> mylib.options
     Options(
       api_key: 'abcdefg' [default: 'abcdefg']
           The API key to our service

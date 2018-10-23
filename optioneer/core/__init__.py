@@ -1,3 +1,9 @@
+"""This submodule contains all the machinery for making optioneer
+do its work.
+
+This module is not part of the public API, and
+therefore has no guarantee of API stability.
+"""
 import re
 from collections import namedtuple
 from contextlib import contextmanager
